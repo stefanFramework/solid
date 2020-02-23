@@ -12,9 +12,9 @@ class UserService
         $this->gMail = new GMailAPI();
     }
 
-    public function auth()
+    public function auth($user, $password)
     {
-
+        return $this->repo->getUserByUserAndPsw($user, AuthenticationHelper::hash($password));
     }
 
     public function newUser($data)
@@ -29,6 +29,11 @@ class UserService
             $this->repo->save($user);
             return $this->send100UserMail($user);
         }
+    }
+
+    public function loadProfile($id)
+    {
+        return $this->repo->getUserById($id);
     }
 
     private function send100UserMail($user)
@@ -54,7 +59,7 @@ class UserService
 
     private function checkUser($user)
     {
-        $user = $this->repo->getUserByUserAndPsw($user->user, $user->password);
+        $user = $this->repo->getUserByUserAndPsw($user->user, AuthenticationHelper::hash($user->password));
 
         if ($user === null) {
             return true;

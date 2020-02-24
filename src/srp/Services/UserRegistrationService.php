@@ -14,45 +14,35 @@ class UserRegistrationService
 
     public function newUser($data)
     {
-        $user = new User();
-        $user->user = $data['user'];
-        $user->password = $data['password'];
+        try {
+            $user = new User();
+            $user->user = $data['user'];
+            $user->password = $data['password'];
 
-        if (!$this->checkUser($user)) {
-            return false;
-        } else {
+            $this->validateUserExists($user);
             $this->repo->save($user);
-            return $this->send100UserMail($user);
+            $this->send100UserMail($user);
+
+        } catch(UserAlreadyExistsException $ex) {
+            throw $ex;
+        } catch (\Exception $ex) {
+            throw $ex;
         }
     }
 
-    private function checkUser($user)
+    private function validateUserExists($user)
     {
         $user = $this->repo->getUserByUserAndPsw($user->user, AuthenticationHelper::hash($user->password));
 
-        if ($user === null) {
-            return true;
-        } else {
-            return false;
+        if (!is_null($user)) {
+            throw new UserAlreadyExistsException('User Already Exists');
         }
     }
 
     private function send100UserMail(User $user)
     {
-        if (empty($user)) {
-            return false;
-        } else {
-            if ($user->isUserNumber100()) {
-                $result = $this->mailer->sendMail('Felicitaciones', 'Usted es el usuario numero 100!!');
-
-                if ($result) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return true;
-            }
+        if ($user->isUserNumber100()) {
+            $this->mailer->sendMail('Felicitaciones', 'Usted es el usuario numero 100!!');
         }
     }
 

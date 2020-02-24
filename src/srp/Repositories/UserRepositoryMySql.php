@@ -1,7 +1,7 @@
 <?php
 
 
-class UserRepositoryMySql
+class UserRepositoryMySql implements IUserRepository
 {
     public function getUserByUserAndPsw($user, $psw)
     {

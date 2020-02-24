@@ -3,11 +3,14 @@
 
 class RegistrateUserController
 {
-    private $userService;
+    private $registrationService;
 
     public function __construct()
     {
-        $this->userService = new UserService();
+        $this->registrationService = new UserRegistrationService(
+            new UserRepositoryMySql(),
+            new GMailAPI()
+        );
     }
 
     public function register()
@@ -15,7 +18,7 @@ class RegistrateUserController
         $user = Input::get('user');
         $psw = Input::get('password');
 
-        $result = $this->userService->newUser([
+        $result = $this->registrationService->newUser([
             'user' => $user,
             'password' => $psw
         ]);

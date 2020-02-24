@@ -1,9 +1,9 @@
 <?php
 
 
-class GMailAPI
+class GMailAPI implements IMailer
 {
-    public function sendMail($subject, $boyd) {
+    public function sendMail($subject, $body) {
         return true;
     }
 }

@@ -4,7 +4,7 @@
 class UserRegistrationService
 {
     private $repo;
-    private $gmail;
+    private $gMail;
 
     public function __construct()
     {

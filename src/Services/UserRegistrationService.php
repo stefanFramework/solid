@@ -1,7 +1,7 @@
 <?php
 
 
-class UserService
+class UserRegistrationService
 {
     private $repo;
     private $gMail;
@@ -10,11 +10,6 @@ class UserService
     {
         $this->repo = new UserRepositoryMySql();
         $this->gMail = new GMailAPI();
-    }
-
-    public function auth($user, $password)
-    {
-        return $this->repo->getUserByUserAndPsw($user, AuthenticationHelper::hash($password));
     }
 
     public function newUser($data)
@@ -31,9 +26,15 @@ class UserService
         }
     }
 
-    public function loadProfile($id)
+    private function checkUser($user)
     {
-        return $this->repo->getUserById($id);
+        $user = $this->repo->getUserByUserAndPsw($user->user, AuthenticationHelper::hash($user->password));
+
+        if ($user === null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private function send100UserMail($user)
@@ -57,14 +58,4 @@ class UserService
         }
     }
 
-    private function checkUser($user)
-    {
-        $user = $this->repo->getUserByUserAndPsw($user->user, AuthenticationHelper::hash($user->password));
-
-        if ($user === null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

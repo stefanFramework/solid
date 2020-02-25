@@ -37,14 +37,12 @@ class UserRegistrationService
         }
     }
 
-    private function send100UserMail($user)
+    private function send100UserMail(User $user)
     {
         if (empty($user)) {
             return false;
         } else {
-            $user100 = $this->repo->getUserById($user->id);
-
-            if ($user100->id == 100) {
+            if ($user->isUserNumber100()) {
                 $result = $this->mailer->sendMail('Felicitaciones', 'Usted es el usuario numero 100!!');
 
                 if ($result) {

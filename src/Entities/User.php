@@ -2,6 +2,7 @@
 
 class User
 {
+    public $id;
     public $user;
     public $password;
 
@@ -9,4 +10,9 @@ class User
     public $lastName;
     public $birthDay;
     public $address;
+
+    public function isUserNumber100()
+    {
+        return $this->id == 100;
+    }
 }

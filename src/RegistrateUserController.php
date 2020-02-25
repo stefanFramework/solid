@@ -19,7 +19,7 @@ class RegistrateUserController
             $user = Input::get('user');
             $psw = Input::get('password');
 
-            $this->registrationService->newUser([
+            $this->registrationService->registrateNewUser([
                 'user' => $user,
                 'password' => $psw
             ]);
@@ -27,7 +27,7 @@ class RegistrateUserController
             Redirect::to('home');
 
         } catch (\Exception $ex) {
-            Redirect::withError('login', 'Usuario o Contraseña incorrectos');
+            Redirect::withError('login', $ex->getMessage());
         }
 
     }

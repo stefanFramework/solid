@@ -4,12 +4,12 @@
 class UserRegistrationService
 {
     private $repo;
-    private $gMail;
+    private $mailer;
 
-    public function __construct()
+    public function __construct(IUserRepository $userRepository, IMailer $mailer )
     {
-        $this->repo = new UserRepositoryMySql();
-        $this->gMail = new GMailAPI();
+        $this->repo = $userRepository;
+        $this->mailer = $mailer;
     }
 
     public function newUser($data)
@@ -45,7 +45,7 @@ class UserRegistrationService
             $user100 = $this->repo->getUserById($user->id);
 
             if ($user100->id == 100) {
-                $result = $this->gMail->sendMail('Felicitaciones', 'Usted es el usuario numero 100!!');
+                $result = $this->mailer->sendMail('Felicitaciones', 'Usted es el usuario numero 100!!');
 
                 if ($result) {
                     return true;

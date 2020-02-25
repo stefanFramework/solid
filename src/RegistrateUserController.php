@@ -7,7 +7,10 @@ class RegistrateUserController
 
     public function __construct()
     {
-        $this->registrationService = new UserRegistrationService();
+        $this->registrationService = new UserRegistrationService(
+            new UserRepositoryMySql(),
+            new GMailAPI()
+        );
     }
 
     public function register()
